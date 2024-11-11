@@ -68,6 +68,19 @@ module RuboCop
       #     %w[two Two]
       #   ]
       #
+      # Configuration option: UseExtendedWords
+      # If set to true, any non-whitespace characters will be considered part of
+      # a word. If set to false, only characters in the range a-zA-Z0-9_ will be
+      # considered part of a word.
+      # When this option is set to true, the `WordRegex` option will be ignored.
+      #
+      # @example UseExtendedWords: true
+      #   # good
+      #   %w[foo bar foo-bar foo/bar foo#bar foo?bar foo@bar]
+      #
+      #   # bad (extended words contain any non-whitespace characters)
+      #   ['foo' 'bar' 'foo-bar' 'foo/bar' 'foo#bar' 'foo?bar' 'foo@bar']
+      #
       class WordArray < Base
         include ArrayMinSize
         include ArraySyntax
@@ -132,7 +145,9 @@ module RuboCop
         end
 
         def word_regex
-          Regexp.new(cop_config['WordRegex'])
+          cop_config['UseExtendedWords'] ?
+            Regexp.new(cop_config['ExtendedWordRegex']) :
+            Regexp.new(cop_config['WordRegex'])
         end
 
         def build_bracketed_array(node)

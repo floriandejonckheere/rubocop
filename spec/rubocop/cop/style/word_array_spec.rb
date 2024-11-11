@@ -24,7 +24,8 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
     let(:cop_config) do
       { 'MinSize' => 0,
         'WordRegex' => /\A(?:\p{Word}|\p{Word}-\p{Word}|\n|\t)+\z/,
-        'EnforcedStyle' => 'percent' }
+        'EnforcedStyle' => 'percent',
+        'UseExtendedWords' => false }
     end
 
     it 'registers an offense for arrays of single quoted strings' do
@@ -405,7 +406,8 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
     let(:cop_config) do
       { 'MinSize' => 0,
         'WordRegex' => /\A(?:\p{Word}|\p{Word}-\p{Word}|\n|\t)+\z/,
-        'EnforcedStyle' => 'brackets' }
+        'EnforcedStyle' => 'brackets',
+        'UseExtendedWords' => false }
     end
 
     it 'does not register an offense for arrays of single quoted strings' do
@@ -666,11 +668,52 @@ RSpec.describe RuboCop::Cop::Style::WordArray, :config do
     let(:cop_config) do
       { 'MinSize' => 2,
         'WordRegex' => /\A(?:\p{Word}|\p{Word}-\p{Word}|\n|\t)+\z/,
-        'EnforcedStyle' => 'percent' }
+        'EnforcedStyle' => 'percent',
+        'UseExtendedWords' => false }
     end
 
     it 'does not autocorrect arrays of one symbol if MinSize > 1' do
       expect_no_offenses('["one"]')
+    end
+  end
+
+  context 'when UseExtendedWords is true' do
+    let(:cop_config) do
+      { 'MinSize' => 0,
+        'WordRegex' => /\A(?:\p{Word}|\p{Word}-\p{Word}|\n|\t)+\z/,
+        'EnforcedStyle' => 'percent',
+        'UseExtendedWords' => true }
+    end
+
+    it 'registers an offense for arrays of strings containing hyphens, slashes, and other non-whitespace characters' do
+      expect_offense(<<~RUBY)
+        ['foo', 'bar', 'foo-bar', 'foo/bar', 'foo#bar', 'foo?bar', 'foo@bar']
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use `%w` or `%W` for an array of words.
+      RUBY
+
+      expect_correction(<<~RUBY)
+        %w(foo bar foo-bar foo/bar foo#bar foo?bar foo@bar)
+      RUBY
+    end
+
+    context 'with a custom WordRegex configuration' do
+      let(:cop_config) do
+        { 'MinSize' => 0,
+          'WordRegex' => /\A[\w@.]+\z/,
+          'EnforcedStyle' => 'percent',
+          'UseExtendedWords' => true }
+      end
+
+      it 'ignores the custom WordRegex' do
+        expect_offense(<<~RUBY)
+        ['foo', 'bar', 'foo-bar', 'foo/bar', 'foo#bar', 'foo?bar', 'foo@bar']
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Use `%w` or `%W` for an array of words.
+      RUBY
+
+        expect_correction(<<~RUBY)
+        %w(foo bar foo-bar foo/bar foo#bar foo?bar foo@bar)
+      RUBY
+      end
     end
   end
 end

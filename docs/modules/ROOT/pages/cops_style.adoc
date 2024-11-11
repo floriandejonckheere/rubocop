@@ -2013,7 +2013,7 @@ items.include?
 
 | PreferredMethods
 | `{"collect"=>"map", "collect!"=>"map!", "collect_concat"=>"flat_map", "inject"=>"reduce", "detect"=>"find", "find_all"=>"select", "member?"=>"include?"}`
-| 
+|
 
 | MethodsAcceptingSymbol
 | `inject`, `reduce`
@@ -6734,11 +6734,11 @@ end
 
 | InverseMethods
 | `{:any?=>:none?, :even?=>:odd?, :===>:!=, :=~=>:!~, :<=>:>=, :>=>:<=}`
-| 
+|
 
 | InverseBlocks
 | `{:select=>:reject, :select!=>:reject!}`
-| 
+|
 |===
 
 == Style/InvertibleUnlessCondition
@@ -6812,7 +6812,7 @@ foo if !condition
 
 | InverseMethods
 | `{:!==>:==, :>=>:<=, :<==>:>, :<=>:>=, :>==>:<, :!~=>:=~, :zero?=>:nonzero?, :nonzero?=>:zero?, :any?=>:none?, :none?=>:any?, :even?=>:odd?, :odd?=>:even?}`
-| 
+|
 |===
 
 == Style/IpAddresses
@@ -7239,7 +7239,7 @@ end
 
 | ValueCapitalization
 | `<none>`
-| 
+|
 |===
 
 == Style/MapCompactWithConditionalBlock
@@ -10691,7 +10691,7 @@ default.
 
 | PreferredDelimiters
 | `{"default"=>"()", "%i"=>"[]", "%I"=>"[]", "%r"=>"{}", "%w"=>"[]", "%W"=>"[]"}`
-| 
+|
 |===
 
 === References
@@ -11139,7 +11139,7 @@ A.foo
 
 | Methods
 | `{"join"=>"", "sum"=>0, "exit"=>true, "exit!"=>false, "split"=>" ", "chomp"=>"\n", "chomp!"=>"\n"}`
-| 
+|
 |===
 
 == Style/RedundantArrayConstructor
@@ -14773,7 +14773,7 @@ from the String class.
 
 | PreferredMethods
 | `{"intern"=>"to_sym"}`
-| 
+|
 |===
 
 == Style/Strip
@@ -16664,9 +16664,13 @@ array of 2 or fewer elements.
 | `2`
 | Integer
 
+| UseExtendedWords
+| `true`
+| Boolean
+
 | WordRegex
 | `(?-mix:\A(?:\p{Word}\|\p{Word}-\p{Word}\|\n\|\t)+\z)`
-| 
+|
 |===
 
 === References
